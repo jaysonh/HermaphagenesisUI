@@ -3,7 +3,7 @@
 let imgs = []
 let prompt_txt = "";
 let controlDown = false;
-
+let bg_tex ;
 function preload() {
   imgs.push( loadImage('/static/images/liver.png'));
   imgs.push( loadImage('/static/images/stomach.png'));
@@ -11,8 +11,12 @@ function preload() {
   imgs.push( loadImage('/static/images/kidney.png'));
 
 
-  imgs.push( loadImage('/static/images/clear.png'));
-  imgs.push( loadImage('/static/images/prompt.png'));
+  imgs.push( loadImage('/static/images/menu_button_save.jpg'));
+  imgs.push( loadImage('/static/images/menu_button_clear.jpg'));
+  imgs.push( loadImage('/static/images/menu_button_help.jpg'));
+  imgs.push( loadImage('/static/images/menu_button_render.jpg'));
+
+  bg_tex = loadImage('/static/images/bg_texs/stone_tex0.jpg');
 }
 
 
@@ -47,6 +51,9 @@ class OrganCanvas{
        {
 	    this.organs[i].draw();
 	}
+
+        fill(0);
+        text("Arrange Organs", 5, 15);
 	pop();
     }
 
@@ -180,6 +187,7 @@ class OrganDisplay{
 	}else {
  		noStroke();
 	}
+
     }
 
     mouseMoved(moveX,moveY){
@@ -189,7 +197,7 @@ class OrganDisplay{
 }
 
 class OrganButton{
-    constructor(iconIndx, name, x,y,w,h,r,g,b) {
+    constructor(iconIndx, name, x, y, w, h, r, g, b ) {
         this.x = x;
         this.y = y;
 	this.w = w;
@@ -274,6 +282,8 @@ let numOrganButtons = 4;
 let organCanvas;
 let selectedOrgan = null;
 
+let outputDisplay = null;
+
 function drawOrganSelectMenu(x,y)
 {
     for( let i = 0; i < organButtons.length; i++)
@@ -281,42 +291,58 @@ function drawOrganSelectMenu(x,y)
          organButtons[i].draw();
     }
 
+    saveButton.draw();
     clearButton.draw();
-    promptButton.draw();
-
+    helpButton.draw();
+    renderButton.draw();
 }
 
 
 function setup() {
-  createCanvas(1024, 768);
+  createCanvas(1024, 768, WEBGL);
 
+  outputDisplay = new OutputDisplay(516, 70, 500,500);
   buttonSize = 50;
   buttonOffset = 5;
 
-  clearButton = new OrganButton( imgs.length-2, "clear", 5, buttonOffset, buttonSize, buttonSize, 70,70,70);
-  clearButton.action_function = function() { organCanvas.clear()  }
 
-  promptButton = new OrganButton(imgs.length-1, "render", 5 + buttonSize + 5, buttonOffset, buttonSize,buttonSize, 70,70,70);
-  promptButton.action_function = function() {  prompt_txt = createPrompt( organCanvas.organs ); }
+  saveButton  = new OrganButton( imgs.length-4, "menu_button_save.jpg", buttonOffset* 1 + buttonSize * 0, buttonOffset, buttonSize, buttonSize, 70,70,70);
+  saveButton.action_function = function() {}
 
-  organButtons.push( new OrganButton( 0, "liver", 	 200+ 1 * buttonOffset,buttonOffset,buttonSize, buttonSize, 200,0, 125) );
-  organButtons.push( new OrganButton( 1, "intestine", 200+2 * buttonOffset + 1 * buttonSize,buttonOffset,buttonSize, buttonSize,125,125,50) );
-  organButtons.push( new OrganButton( 2, "kidney",	 200+3 * buttonOffset + 2 * buttonSize,buttonOffset,buttonSize, buttonSize,125,0,215) );
-  organButtons.push( new OrganButton( 3, "heart", 	 200+4 * buttonOffset + 3 * buttonSize,buttonOffset,buttonSize, buttonSize,0,125,50) );
+  clearButton  = new OrganButton( imgs.length-3, "menu_button_clear.jpg", buttonOffset*2 + buttonSize * 1, buttonOffset, buttonSize, buttonSize,70,70,70);
+  clearButton.action_function = function() {organCanvas.clear() }
+
+  helpButton  = new OrganButton( imgs.length-2, "menu_button_help.jpg", buttonOffset*3 + buttonSize * 2, buttonOffset, buttonSize, buttonSize,70,70,70);
+  helpButton.action_function = function() {}
+
+  renderButton  = new OrganButton( imgs.length-1, "menu_button_render.jpg",  buttonOffset*4 + buttonSize * 3, buttonOffset, buttonSize, buttonSize, 70,70,70);
+  renderButton.action_function = function() {   prompt_txt = createPrompt( organCanvas.organs );}
+
+
+
+  organButtons.push( new OrganButton( 0, "liver", 	 400 + 1 * buttonOffset + 0 * buttonSize, buttonOffset,buttonSize, buttonSize, 200,0, 125) );
+  organButtons.push( new OrganButton( 1, "intestine",    400 + 2 * buttonOffset + 1 * buttonSize, buttonOffset,buttonSize, buttonSize,125,125,50) );
+  organButtons.push( new OrganButton( 2, "kidney",	 400 + 3 * buttonOffset + 2 * buttonSize, buttonOffset,buttonSize, buttonSize,125,0,215) );
+  organButtons.push( new OrganButton( 3, "heart", 	 400 + 4 * buttonOffset + 3 * buttonSize, buttonOffset,buttonSize, buttonSize,0,125,50) );
 
   for(var i = 0;i < organButtons.length;i++)
   {
 	organButtons[i].setMultiselect(true);
   }
-  organCanvas = new OrganCanvas(5, 70, 500, 500, 200,200,200);
+  organCanvas = new OrganCanvas(8, 70, 500, 500, 255,255,255);
 }
 
 function draw() {
-   background(255);
+   background(200);
+translate(-width/2,-height/2);
+
+     fill(200);
+     texture(bg_tex);
+     rect(0,0,width,height);
    drawOrganSelectMenu(0,0);
    organCanvas.draw();
    drawPromptBox(5,600, prompt_txt);   
-   // testMe();
+   outputDisplay.draw();
 }
 
 function mouseMoved()
@@ -358,7 +384,7 @@ function mousePressed()
 			organButtons[selected].setSelected(true);
 		}
 		clearButton.mousePressed(mouseX,mouseY);
-		promptButton.mousePressed(mouseX,mouseY);
+		renderButton.mousePressed(mouseX,mouseY);
 	}
 }
 
