@@ -109,13 +109,16 @@ class OrganCanvas{
 		}	
 	}else 
 	{
-	       if( mX > this.x && mX < this.x  + this.w && this.x > 0 &&
-        	   mX > this.y && mY < this.y  + this.h && this.y < mY && selectedOrgan != null )
+		var organSizeX = 50;
+		var organSizeY = 50;
+		console.log("mousePressed: " + mX + "," + mY + " canvas pos: " + this.x + "," + this.y	+ " selected organ: " + selectedOrgan);
+	       if( mX > this.x && mX < this.x  + this.w - organSizeX && this.x > 0 &&
+        	   mY > this.y && mY < this.y  + this.h - organSizeY && this.y < mY && selectedOrgan != null )
        	       {
     	       		let offX = mX - this.x;
 	   		let offY = mY - this.y;
 	   		//console.log("adding organ at: " + offX + "," + offY);	
-	   		this.organs.push( new OrganDisplay( offX, offY, 50,50,selectedOrgan.r, selectedOrgan.g, selectedOrgan.b, selectedOrgan.iconIndx, selectedOrgan.name, this.w, this.h));
+	   		this.organs.push( new OrganDisplay( offX, offY, organSizeX,organSizeY,selectedOrgan.r, selectedOrgan.g, selectedOrgan.b, selectedOrgan.iconIndx, selectedOrgan.name, this.w, this.h));
        		}
 	}
    }
@@ -364,23 +367,23 @@ function mousePressed()
 
 	if(controlDown === false)
 	{
-	var selected = -1;
+		var selected = -1;
 
-	for(let i =0;i < organButtons.length;i++)
-	{
-		if(organButtons[i].selected ===true){
-		    selected =i;
+		for(let i =0;i < organButtons.length;i++)
+		{
+			if(organButtons[i].selected ===true){
+		    	selected =i;
+			}
 		}
-	}
-        var organSelected = false;
-        for( let i = 0;i < organButtons.length;i++)
-        {
-            if( organButtons[i].mousePressed(mouseX,mouseY))
-	    {
-		organSelected = true;
-		selectedOrgan = organButtons[i];
-	    }
-        }
+        	var organSelected = false;
+        	for( let i = 0;i < organButtons.length;i++)
+        	{
+            		if( organButtons[i].mousePressed(mouseX,mouseY))
+	    		{
+				organSelected = true;
+				selectedOrgan = organButtons[i];
+	    		}
+        	}
 		if(organSelected == false)
 		{
 			organButtons[selected].setSelected(true);
