@@ -1,4 +1,4 @@
-
+// For chrome install this extension: https://mybrowseraddon.com/access-control-allow-origin.html?v=0.1.9&type=install
 
 let imgs = []
 let prompt_txt = "";
@@ -53,7 +53,7 @@ class OrganCanvas{
 	}
 
         fill(0);
-        text("Arrange Organs", 5, 15);
+        //text("Arrange Organs", 5, 15);
 	pop();
     }
 
@@ -106,7 +106,7 @@ class OrganCanvas{
 			if( this.organs[i].select( mouseX-this.x,mouseY-this.y) === true )
 			{
 				this.selectedOrgan = i;
-				console.log("organ: " + i + " IS SELECTED!!!");
+				//console.log("organ: " + i + " IS SELECTED!!!");
 			}
 			//else{
 			//	console.log("organ" + i + " not selected");
@@ -120,7 +120,7 @@ class OrganCanvas{
        	       {
     	       		let offX = mouseX - this.x;
 	   		let offY = mouseY - this.y;
-	   		console.log("adding organ at: " + offX + "," + offY);	
+	   		//console.log("adding organ at: " + offX + "," + offY);	
 	   		this.organs.push( new OrganDisplay( offX, offY, 50,50,selectedOrgan.r, selectedOrgan.g, selectedOrgan.b, selectedOrgan.iconIndx, selectedOrgan.name));
        		}
 	}
@@ -169,7 +169,6 @@ class OrganDisplay{
 //	translate(-this.selectOffX, -this.selectOffY);
 	
 	this.selectOffX = 0; this.selectOffY=0;
-	console.log("selectOff: " + this.selectOffX + "," + this.selectOffY);
 
 	image( imgs[ this.iconIndx], this.x - this.selectOffX, this.y - this.selectOffY, this.w, this.h);
     	
@@ -260,7 +259,6 @@ class OrganButton{
             mouseY > this.y && mouseY < this.y + this.h)
        {
             this.selected = true;
-	   console.log("Mouspressed " + mouseX + "," + mouseY);
 
 	    if( this.action_function != null)
 	    {
@@ -318,8 +316,6 @@ function setup() {
   renderButton  = new OrganButton( imgs.length-1, "menu_button_render.jpg",  buttonOffset*4 + buttonSize * 3, buttonOffset, buttonSize, buttonSize, 70,70,70);
   renderButton.action_function = function() {   prompt_txt = createPrompt( organCanvas.organs );}
 
-
-
   organButtons.push( new OrganButton( 0, "liver", 	 400 + 1 * buttonOffset + 0 * buttonSize, buttonOffset,buttonSize, buttonSize, 200,0, 125) );
   organButtons.push( new OrganButton( 1, "intestine",    400 + 2 * buttonOffset + 1 * buttonSize, buttonOffset,buttonSize, buttonSize,125,125,50) );
   organButtons.push( new OrganButton( 2, "kidney",	 400 + 3 * buttonOffset + 2 * buttonSize, buttonOffset,buttonSize, buttonSize,125,0,215) );
@@ -333,16 +329,16 @@ function setup() {
 }
 
 function draw() {
-   background(200);
-translate(-width/2,-height/2);
-
-     fill(200);
-     texture(bg_tex);
-     rect(0,0,width,height);
-   drawOrganSelectMenu(0,0);
-   organCanvas.draw();
-   drawPromptBox(5,600, prompt_txt);   
-   outputDisplay.draw();
+    background(200);
+    translate(-width/2,-height/2);
+    
+    fill(200);
+    texture(bg_tex);
+    rect(0,0,width,height);
+    drawOrganSelectMenu(0,0);
+    organCanvas.draw();
+    drawPromptBox(5,600, prompt_txt);   
+    outputDisplay.draw();
 }
 
 function mouseMoved()
@@ -380,7 +376,6 @@ function mousePressed()
         }
 		if(organSelected == false)
 		{
-			console.log("resetting to selected: " + selected);
 			organButtons[selected].setSelected(true);
 		}
 		clearButton.mousePressed(mouseX,mouseY);

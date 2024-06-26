@@ -11,7 +11,7 @@ function drawOrganSelectMenuExternal(x,y)
 
      function drawPromptBox(x,y, prompt_txt) {
                 fill(0);
-                text("Prompt: " + prompt_txt, x, y);
+//                text("Prompt: " + prompt_txt, x, y);
         }
 
 

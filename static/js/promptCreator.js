@@ -37,8 +37,8 @@ function createPrompt(organList){
 	}	
 
         url = "http://18.189.184.178/?prompt=\"" + promptWithNL + "\"";
-//	console.log("opening url: " + url");
-	window.open(url);
-//	window.open("http://www.google.com");
+	loadingGenImg = true;
+	console.log("opening url: " + url);
+	outputImg = loadImage(url);
 	return promptWithNL;
 }
