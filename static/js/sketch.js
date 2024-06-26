@@ -145,6 +145,10 @@ class OrganDisplay{
         this.organs = [];
     }
 
+    clear() {
+	this.organs = [];
+    }
+
     select(selX,selY)
     {
 	if( selX > this.x && selX < this.x + this.w &&
@@ -308,7 +312,7 @@ function setup() {
   saveButton.action_function = function() {}
 
   clearButton  = new OrganButton( imgs.length-3, "menu_button_clear.jpg", buttonOffset*2 + buttonSize * 1, buttonOffset, buttonSize, buttonSize,70,70,70);
-  clearButton.action_function = function() {organCanvas.clear() }
+  clearButton.action_function = function() {organCanvas.clear(); outputDisplay.clear() }
 
   helpButton  = new OrganButton( imgs.length-2, "menu_button_help.jpg", buttonOffset*3 + buttonSize * 2, buttonOffset, buttonSize, buttonSize,70,70,70);
   helpButton.action_function = function() {}

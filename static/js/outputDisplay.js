@@ -8,6 +8,11 @@ class OutputDisplay
 	     this.angle = 0;
 	}
 
+	clear(){
+	    loadingGenImg = false;
+	    outputImg = null;
+	}
+
         drawLoadingSpinner(){
 		fill(125);
 		var ellipseDetail = 100;
