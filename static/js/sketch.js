@@ -42,7 +42,6 @@ class OrganCanvas{
     }
     draw(){
        push();
-//	rectMode(CENTER);
        fill(this.r,this.g,this.b);
        rect(this.x, this.y, this.w, this.h);
 
@@ -72,14 +71,11 @@ class OrganCanvas{
          }
     }
     mouseDragged(){
-       // for(let i = 0; i < this.organs.length;i++)
-       //{
-       //     this.organs[i].mouseDragged();
-       // }
     }
 
     addOrgan(organ){
 	if(this.selectedOrgan != -1){
+	   // organ.setCanvasSize(this.w, this.h);
 	    this.organs.push(organ);
 	}
    }
@@ -88,22 +84,20 @@ class OrganCanvas{
     this.organs = []
   }
 
-  mouseMoved(mouseX,mouseY){
+     mouseMoved(mouseX,mouseY){
 	if(controlDown===true && this.selectedOrgan >= 0)
 	{
 		this.organs[this.selectedOrgan].mouseMoved(mouseX-this.x,mouseY-this.y);
 	}
- }
+    }
 
-   mousePressed(mouseX,mouseY){
-
+    mousePressed(mX,mY){
 	if(controlDown===true)
 	{
-
 		// check if we select ann exisiting organ
 		for( let i = 0;i < this.organs.length;i++)
 		{
-			if( this.organs[i].select( mouseX-this.x,mouseY-this.y) === true )
+			if( this.organs[i].select( mX-this.x,mY-this.y) === true )
 			{
 				this.selectedOrgan = i;
 				//console.log("organ: " + i + " IS SELECTED!!!");
@@ -113,15 +107,15 @@ class OrganCanvas{
 			//}
 	
 		}	
-	}else
+	}else 
 	{
-	       if( mouseX > this.x && mouseX < this.x  + this.w && this.x > 0 &&
-        	   mouseX > this.y && mouseY < this.y  + this.h && this.y < mouseY && 	selectedOrgan != null )
+	       if( mX > this.x && mX < this.x  + this.w && this.x > 0 &&
+        	   mX > this.y && mY < this.y  + this.h && this.y < mY && selectedOrgan != null )
        	       {
-    	       		let offX = mouseX - this.x;
-	   		let offY = mouseY - this.y;
+    	       		let offX = mX - this.x;
+	   		let offY = mY - this.y;
 	   		//console.log("adding organ at: " + offX + "," + offY);	
-	   		this.organs.push( new OrganDisplay( offX, offY, 50,50,selectedOrgan.r, selectedOrgan.g, selectedOrgan.b, selectedOrgan.iconIndx, selectedOrgan.name));
+	   		this.organs.push( new OrganDisplay( offX, offY, 50,50,selectedOrgan.r, selectedOrgan.g, selectedOrgan.b, selectedOrgan.iconIndx, selectedOrgan.name, this.w, this.h));
        		}
 	}
    }
@@ -129,7 +123,7 @@ class OrganCanvas{
 
 class OrganDisplay{
 
-    constructor(x,y,w,h,r,g,b, iconIndx,name) {
+    constructor(x,y,w,h,r,g,b, iconIndx,name, canvasW, canvasH) {
         this.x = x;
         this.y = y;
         this.w = w;
@@ -143,7 +137,16 @@ class OrganDisplay{
 	this.iconIndx = iconIndx;
 	this.selected = false;
         this.organs = [];
+	this.canvasW = canvasW;
+	this.canvasH = canvasH;
+
+	console.log("creating OrganDisplay at positin: " + this.x + "," + this.y + " size: " + this.w + "," + this.h + " canvas size: " + this.canvasW + "," + this.canvasH);
     }
+
+   // setCanvasSize(w,h){
+ //	this.canvasW = w;
+//	this.canvasH = h;
+    //}
 
     clear() {
 	this.organs = [];
