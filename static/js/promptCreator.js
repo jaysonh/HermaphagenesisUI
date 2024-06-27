@@ -2,6 +2,12 @@
 
 function createPrompt(organList){
 
+	if( organList.length <= 0)
+	{
+  		window.alert('Cannot generate organism, no organs added to canvas')
+		return "";
+	}else
+	{
 	var prompt = "a unique amphibious creature with ";
 
 	for(var i = 0;i < organList.length;i++)
@@ -45,13 +51,14 @@ function createPrompt(organList){
 
 	var strArr =[];
 	strArr.push( promptWithNL);
-	saveStrings(strArr);
+	saveStrings(strArr, "prompt.txt");
 
         url = "http://18.189.184.178/?prompt=\"" + promptWithNL + "\"";
 	loadingGenImg = true;
 	console.log("opening url: " + url);
 	outputImg = loadImage(url);
 	return promptWithNL;
+	}
 }
 
 // organName - string 

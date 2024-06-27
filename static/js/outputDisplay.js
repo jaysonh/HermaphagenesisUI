@@ -15,10 +15,9 @@ class OutputDisplay
 
 	save(){
 	    if(outputImg != null){
-		console.log("saving organism.jpg");
 		save(outputImg, "organism.jpg");	
 	    }else{
-		console.log("can't save image, nothing generated");
+		window.alert("no organism generated yet");
 	    }
 	}
 

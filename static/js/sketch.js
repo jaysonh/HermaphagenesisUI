@@ -221,6 +221,7 @@ class OrganButton{
 	this.r=r;
 	this.g=g;
 	this.b=b;
+	this.highlightCol = color(0,255,255);
 	this.name = name; 
 	this.multiSelect = false;
 	this.iconIndx =iconIndx;
@@ -240,25 +241,24 @@ class OrganButton{
     }
 
     draw() {
-	fill(this.r, this.g, this.b);     
+	fill(255);
         if(this.mouseOver == true)
 	{
-		strokeWeight(4);
-		stroke(0);
-		rect(this.x, this.y, this.w, this.h);
+		//strokeWeight(4);
+		//stroke(0);
+		//rect(this.x, this.y, this.w, this.h);
 	}
 
-        noStroke();
-	image(imgs[this.iconIndx],this.x, this.y, this.w, this.h);
 
 	if(this.multiSelect == true && this.selected ==true)
 	{
-		stroke(0);
-		noFill();
-		rect(this.x, this.y, this.w, this.h);
-		line(this.x,this.y, this.x + this.w, this.y + this.h);
-		line(this.x + this.w, this.y, this.x, this.y+ this.h);
+		tint(this.highlightCol, 127);
+	}else
+	{
+		tint(255,255,255);
 	}
+
+        image(imgs[this.iconIndx],this.x, this.y, this.w, this.h);
     }
 
     mouseMoved(mouseX,mouseY){
@@ -299,12 +299,12 @@ let selectedOrgan = null;
 
 let outputDisplay = null;
 
-function drawOrganSelectMenu(x,y)
+function drawOrganSelectMenu(x,y,w,h)
 {
    
-            fill(200);
-            texture(canvas_tex);
-            rect( this.x, this.y, this.w, this.h );
+  //          fill(200);
+  //          texture(canvas_tex);
+//	    rect(x,y,w,h);
 
     for( let i = 0; i < organButtons.length; i++)
     {
@@ -355,11 +355,11 @@ function draw() {
     translate(-width/2,-height/2);
     
     fill(200);
-    texture(bg_tex);
+   texture(bg_tex);
     rect(0,0,width,height);
 
 
-    drawOrganSelectMenu(0,0);
+    drawOrganSelectMenu(0,0,width,height);
     organCanvas.draw();
     drawPromptBox(5,600, prompt_txt);   
     outputDisplay.draw();
