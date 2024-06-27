@@ -43,10 +43,14 @@ function createPrompt(organList){
 		indx++;
 	}	
 
+	var strArr =[];
+	strArr.push( promptWithNL);
+	saveStrings(strArr);
+
         url = "http://18.189.184.178/?prompt=\"" + promptWithNL + "\"";
 	loadingGenImg = true;
 	console.log("opening url: " + url);
-//	outputImg = loadImage(url);
+	outputImg = loadImage(url);
 	return promptWithNL;
 }
 
@@ -84,15 +88,15 @@ function createOrganPosition(organName, numOrgans, posX, posY){
 
 	// Left
 	if( posX < 0.3333){
-		txt += " left ";
+		txt += " left, ";
 	}
 	// Centre
 	else if(posX < 0.6666){
-		txt += " centre ";
+		txt += " centre, ";
 	}
 	// Right
 	else{
-		txt += " right ";
+		txt += " right, ";
 	}
 
 

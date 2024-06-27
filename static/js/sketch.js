@@ -4,6 +4,7 @@ let imgs = []
 let prompt_txt = "";
 let controlDown = false;
 let bg_tex ;
+let canvas_tex;
 function preload() {
   imgs.push( loadImage('/static/images/liver.png'));
   imgs.push( loadImage('/static/images/stomach.png'));
@@ -16,7 +17,8 @@ function preload() {
   imgs.push( loadImage('/static/images/menu_button_help.jpg'));
   imgs.push( loadImage('/static/images/menu_button_render.jpg'));
 
-  bg_tex = loadImage('/static/images/bg_texs/stone_tex0.jpg');
+  bg_tex     = loadImage('/static/images/bg_texs/stone_tex1.jpg');
+  canvas_tex = loadImage('/static/images/bg_texs/stone_tex2.jpg');
 }
 
 
@@ -44,6 +46,11 @@ class OrganCanvas{
        push();
        fill(this.r,this.g,this.b);
        rect(this.x, this.y, this.w, this.h);
+
+    fill(200);
+    texture(canvas_tex);
+    rect(this.x, this.y, this.w, this.h );
+
 
 	translate(this.x, this.y);
        for(let i = 0; i < this.organs.length;i++)
@@ -294,6 +301,11 @@ let outputDisplay = null;
 
 function drawOrganSelectMenu(x,y)
 {
+   
+            fill(200);
+            texture(canvas_tex);
+            rect( this.x, this.y, this.w, this.h );
+
     for( let i = 0; i < organButtons.length; i++)
     {
          organButtons[i].draw();
@@ -315,7 +327,7 @@ function setup() {
 
 
   saveButton  = new OrganButton( imgs.length-4, "menu_button_save.jpg", buttonOffset* 1 + buttonSize * 0, buttonOffset, buttonSize, buttonSize, 70,70,70);
-  saveButton.action_function = function() {}
+  saveButton.action_function = function() {outputDisplay.save(); }
 
   clearButton  = new OrganButton( imgs.length-3, "menu_button_clear.jpg", buttonOffset*2 + buttonSize * 1, buttonOffset, buttonSize, buttonSize,70,70,70);
   clearButton.action_function = function() {organCanvas.clear(); outputDisplay.clear() }
@@ -345,6 +357,8 @@ function draw() {
     fill(200);
     texture(bg_tex);
     rect(0,0,width,height);
+
+
     drawOrganSelectMenu(0,0);
     organCanvas.draw();
     drawPromptBox(5,600, prompt_txt);   
@@ -384,12 +398,15 @@ function mousePressed()
 				selectedOrgan = organButtons[i];
 	    		}
         	}
+		
+                clearButton.mousePressed(mouseX,mouseY);
+                renderButton.mousePressed(mouseX,mouseY);
+                saveButton.mousePressed(mouseX,mouseY);
+
 		if(organSelected == false)
 		{
 			organButtons[selected].setSelected(true);
 		}
-		clearButton.mousePressed(mouseX,mouseY);
-		renderButton.mousePressed(mouseX,mouseY);
 	}
 }
 

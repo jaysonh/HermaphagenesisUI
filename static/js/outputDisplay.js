@@ -13,8 +13,18 @@ class OutputDisplay
 	    outputImg = null;
 	}
 
+	save(){
+	    if(outputImg != null){
+		console.log("saving organism.jpg");
+		save(outputImg, "organism.jpg");	
+	    }else{
+		console.log("can't save image, nothing generated");
+	    }
+	}
+
         drawLoadingSpinner(){
 		fill(125);
+
 		var ellipseDetail = 100;
 		ellipse(this.x + this.w/2,this.y+ this.w/2, this.w/2, this.w/2, ellipseDetail);
 		fill(75);
@@ -30,7 +40,13 @@ class OutputDisplay
 
 	    fill(255);
 	    rect(this.x, this.y, this.w, this.h );
+
+
+	    fill(200);
+    	    texture(canvas_tex);
+    	    rect( this.x, this.y, this.w, this.h );
 	
+    	    	
 	    if( loadingGenImg ===true)
 	    {
 		this.drawLoadingSpinner();
