@@ -36,6 +36,12 @@ class OrganCanvas{
 	this.selectedOrgan = -1;
 	this.organs = []
     }
+    
+    deselect(){
+	 for( let i = 0;i < this.organs.length;i++){
+                this.organs[i].deselect();
+	}
+    }
 
     getOrgans(){
 	// 1=liver 2=heart 3 =intestine 4=kidney
@@ -188,6 +194,9 @@ class OrganDisplay{
 
 	console.log("creating OrganDisplay at positin: " + this.x + "," + this.y + " size: " + this.w + "," + this.h + " canvas size: " + this.canvasW + "," + this.canvasH);
     }
+    deselect(){
+	this.selected = false;
+    }
     getWidth() { return this.w; }
     getHeight() { return this.h; }
 
@@ -243,24 +252,25 @@ class OrganDisplay{
 //	translate(-this.selectOffX, -this.selectOffY);
 	
 	this.selectOffX = 0; this.selectOffY=0;
-	console.log("iconIndx: " + this.iconIndx);
-	image( imgs[ this.iconIndx], this.x - this.selectOffX, this.y - this.selectOffY, this.w, this.h);
     	
 	if(this.selected == true)
 	{
-	    stroke(0);
-	    strokeWeight(4);
-	    noFill();
-	    rect( this.x - this.selectOffX, this.y - this.selectOffY, 
-		  this.w, 		    this.h);
-	    line( this.x - this.selectOffX, 	     this.y - this.selectOffY, 
-		  this.x + this.w - this.selectOffX, this.y + this.h - this.selectOffY);
-	    line( this.x - this.selectOffX + this.w, this.y - this.selectOffY, 
-		  this.x - this.selectOffX, 	     this.y + this.h - this.selectOffY);
+		tint(0,255,0,127);
+	    //stroke(0);
+	    //strokeWeight(4);
+	    //noFill();
+	    //rect( this.x - this.selectOffX, this.y - this.selectOffY, 
+		//  this.w, 		    this.h);
+//	    line( this.x - this.selectOffX, 	     this.y - this.selectOffY, 
+///		  this.x + this.w - this.selectOffX, this.y + this.h - this.selectOffY);
+///	    line( this.x - this.selectOffX + this.w, this.y - this.selectOffY, 
+//		  this.x - this.selectOffX, 	     this.y + this.h - this.selectOffY);
 	}else {
- 		noStroke();
+ //		noStroke();
+		tint(255,255,255,255);
 	}
 
+        image( imgs[ this.iconIndx], this.x - this.selectOffX, this.y - this.selectOffY, this.w, this.h);
     }
 
     mouseMoved(moveX,moveY){
@@ -523,5 +533,9 @@ function keyReleased() {
      }else if(keyCode == SHIFT ){
 	shiftDown = false;
         }
+     else if(keyCode == ESCAPE){
+
+	organCanvas.deselect();
+}
 }
 
