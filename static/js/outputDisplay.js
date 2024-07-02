@@ -6,7 +6,7 @@ class OutputDisplay
 	     this.w = w;
 	     this.h = h;	    
 	     this.angle = 0;
-
+	     this.loadingText = loadImage("/static/images/loading_text.png");
 	     this.blankTex =loadImage("/static/images/blank.png");  
 	}
 
@@ -26,12 +26,17 @@ class OutputDisplay
 	drawLoadingBar(x,y){
 		tint(0);
 
-		texture(this.blankTex);
+		
 		push();
 		var lineWidth = width/4;
 		var barWidth = 8;
 		var lineHeight =60;
 		translate(x+lineWidth/2,y-100);
+		texture(this.loadingText);
+		noStroke();
+		rect(0,-50,this.loadingText.width*0.75,this.loadingText.height*0.75);
+		
+		texture(this.blankTex);
 		strokeWeight(barWidth);
 		line(barWidth/2,0,lineWidth-barWidth/2,0);
 		line(barWidth/2,lineHeight,lineWidth-barWidth/2,lineHeight);
