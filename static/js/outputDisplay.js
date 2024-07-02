@@ -1,11 +1,13 @@
 class OutputDisplay
 {
-	constructor(x,y,w,h){
+	constructor(x,y,w,h,img){
 	     this.x = x;
 	     this.y = y;
 	     this.w = w;
 	     this.h = h;	    
 	     this.angle = 0;
+
+	     this.blankTex =loadImage("/static/images/blank.png");  
 	}
 
 	clear(){
@@ -19,6 +21,31 @@ class OutputDisplay
 	    }else{
 		window.alert("no organism generated yet");
 	    }
+	}
+
+	drawLoadingBar(x,y){
+		tint(0);
+
+		texture(this.blankTex);
+		push();
+		var lineWidth = width/4;
+		var barWidth = 8;
+		var lineHeight =60;
+		translate(x+lineWidth/2,y-100);
+		strokeWeight(barWidth);
+		line(barWidth/2,0,lineWidth-barWidth/2,0);
+		line(barWidth/2,lineHeight,lineWidth-barWidth/2,lineHeight);
+		
+		line(0,barWidth/2,0,lineHeight-barWidth/2);
+		line(lineWidth,barWidth/2,lineWidth,lineHeight-barWidth/2);
+		
+		var blockWidth = lineWidth/10;
+		noStroke();
+		var timer = (lineWidth-blockWidth) - (millis() / 10)% (lineWidth-blockWidth);
+		for(var x = barWidth*2; x < lineWidth-blockWidth - timer; x+= blockWidth){
+			rect(x,barWidth*2,blockWidth-4,lineHeight-barWidth*4);
+		}
+		pop()
 	}
 
         drawLoadingSpinner(){
@@ -36,7 +63,7 @@ class OutputDisplay
 	}
 
 	draw(){
-
+       	    tint(255);
 	    fill(255);
 	    rect(this.x, this.y, this.w, this.h );
 
@@ -48,13 +75,19 @@ class OutputDisplay
     	    	
 	    if( loadingGenImg ===true)
 	    {
-		this.drawLoadingSpinner();
+		this.drawLoadingBar(width/2,height/2);
+		//this.drawLoadingSpinner();
 	    }
 
 	    if(outputImg != null)
+	    {
+		fill(255);
+		tint(255);
+		texture(outputImg);
+		rect(this.x,this.y,this.w, this.h);
 		image(outputImg,this.x, this.y, this.w, this.h );
-
-	    fill(0);
+	    }
+	    //fill(0);
 	    //text( "Output", this.x + 5, this.y + 15);
 		
 

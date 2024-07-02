@@ -3,9 +3,9 @@ let iconSize = 50;
 let imgs = []
 let prompt_txt = "";
 let shiftDown = false;
-let controlDown = false;
 let bg_tex ;
 let canvas_tex;
+let blankImg;
 let sizeDragging = false;
 
 function preload() {
@@ -22,6 +22,7 @@ function preload() {
 
   bg_tex     = loadImage('/static/images/bg_texs/stone_tex1.jpg');
   canvas_tex = loadImage('/static/images/bg_texs/stone_tex2.jpg');
+  blank_img  = loadImage('/static/images/blank.png');
 }
 
 class OrganCanvas{
@@ -52,9 +53,10 @@ class OrganCanvas{
     }
     draw(){
        push();
+       tint(255);
        fill(this.r,this.g,this.b);
        rect(this.x, this.y, this.w, this.h);
-
+    
     fill(200);
     texture(canvas_tex);
     rect(this.x, this.y, this.w, this.h );
@@ -87,6 +89,7 @@ class OrganCanvas{
 
     addOrgan(mX,mY, iconIndx){
 	
+	iconSize = 150;
 	if(mX > this.x && mX < this.x + this.w-iconSize &&
 	   mY > this.y && mY < this.y + this.h-iconSize)
 	{
@@ -102,7 +105,7 @@ class OrganCanvas{
   }
 
      mouseMoved(mouseX,mouseY){
-	if(controlDown===true && this.selectedOrgan >= 0)
+	if(shiftDown===true && this.selectedOrgan >= 0)
 	{
 		this.organs[this.selectedOrgan].mouseMoved(mouseX-this.x,mouseY-this.y);
 	}
@@ -112,7 +115,6 @@ class OrganCanvas{
 
     selectOrgan(mX,mY){
 	var result = -1;
-	console.log("chekcing organs");
 	mX = mX - this.x;
 	mY = mY - this.y;
 	 for( let i = 0;i < this.organs.length;i++)
@@ -140,7 +142,7 @@ class OrganCanvas{
    	} 
    }
     mousePressed(mX,mY){
-	if(controlDown===true)
+	if(shiftDown===true)
 	{
 		// check if we select ann exisiting organ
 		for( let i = 0;i < this.organs.length;i++)
@@ -156,8 +158,8 @@ class OrganCanvas{
 	}else if(shiftDown === true){
 
 	}else{
-		var organSizeX = 50;
-		var organSizeY = 50;
+		var organSizeX = 150;
+		var organSizeY = 150;
 		console.log("mousePressed: " + mX + "," + mY + " canvas pos: " + this.x + "," + this.y	+ " selected organ: " + selectedOrgan);
 	       if( mX > this.x && mX < this.x  + this.w - organSizeX && this.x > 0 &&
         	   mY > this.y && mY < this.y  + this.h - organSizeY && this.y < mY && selectedOrgan != null )
@@ -288,6 +290,7 @@ class OrganButton{
 	this.r=r;
 	this.g=g;
 	this.b=b;
+	this.mouseOver = false;
 	this.selected=false;
 	this.highlightCol = color(0,255,255);
 	this.name = name; 
@@ -316,20 +319,12 @@ class OrganButton{
 	fill(255);
         if(this.mouseOver == true)
 	{
-		//strokeWeight(4);
-		//stroke(0);
-		//rect(this.x, this.y, this.w, this.h);
+		tint(127);
+	}else{
+		tint(255);
 	}
-
-
-	if(this.highlight ==true)
-	{
-		tint(0,255,255, 127);
-	}else
-	{
-		tint(255,255,255);
-	}
-
+	fill(155);
+	rect(this.x,this.y,this.w,this.h);
         image(imgs[this.iconIndx],this.x, this.y, this.w, this.h);
     }
 
@@ -399,13 +394,13 @@ function drawOrganSelectMenu(x,y,w,h)
 function setup() {
   createCanvas(1024, 768, WEBGL);
 
-  outputDisplay = new OutputDisplay(516, 70, 500,500);
+  outputDisplay = new OutputDisplay(516, 70, 500,500,blankImg);
   buttonSize = 50;
   buttonOffset = 5;
 
 
   saveButton  = new OrganButton( imgs.length-4, "menu_button_save.jpg", buttonOffset* 1 + buttonSize * 0, buttonOffset, buttonSize, buttonSize, 70,70,70);
-  saveButton.action_function = function() {outputDisplay.save(); }
+  saveButton.action_function = function() {outputDisplay.save(); savePrompt("prompt.txt"); }
 
   clearButton  = new OrganButton( imgs.length-3, "menu_button_clear.jpg", buttonOffset*2 + buttonSize * 1, buttonOffset, buttonSize, buttonSize,70,70,70);
   clearButton.action_function = function() {organCanvas.clear(); outputDisplay.clear() }
@@ -431,7 +426,7 @@ function setup() {
 function draw() {
     background(200);
     translate(-width/2,-height/2);
-    
+tint(255);    
     fill(200);
    texture(bg_tex);
     rect(0,0,width,height);
@@ -450,7 +445,7 @@ function mousePressed()
 	 var selButton = false;
 
 	// check if pressed organ button
-	if(controlDown === false)
+	if(shiftDown === false)
 	{
 		var selIndx = -1;
 		for( let i = 0; i < organButtons.length; i++)
@@ -485,12 +480,12 @@ function mousePressed()
 		console.log("Selected button: " + selButton);
 	}
 
-	if( controlDown === false && shiftDown === false && selButton === false )
+	if( shiftDown === false && selButton === false )
 	{
 		organCanvas.addOrgan(mouseX, mouseY, selOrgan);
 	}
 
-	if( controlDown === true){
+	if( shiftDown === true){
 
 		selOrgan = organCanvas.selectOrgan(mouseX,mouseY);
 	}
@@ -502,40 +497,40 @@ function mouseReleasaed(){
 
 function mouseDragged()
 {
-	if(controlDown === true){
+	if(shiftDown === true){
         	console.log("moving organ: " + selOrgan);
 	        organCanvas.moveOrgan(mouseX,mouseY,pmouseX,pmouseY, selOrgan);
         }
 
-	// Adjust size
-	if(shiftDown === true){
-		console.log("adjusting organ size: " + selOrgan);
-		var diff = mouseX - pmouseX;
-		organCanvas.adjustOrganSize(diff,selOrgan);
-	}
 }
 
 function keyPressed() {
-	if (keyCode === CONTROL) {
-	controlDown = true;
-     }else if(keyCode == SHIFT ){
-	shiftDown = true;
-	console.log("shift presed");
+        if(keyCode == SHIFT ){
+	    shiftDown = true;
+            console.log("shift presed");
 	}
 
 }
 
 
 function keyReleased() {
-        if (keyCode === CONTROL) {
-	controlDown = false;
-	organCanvas.unselect();
-     }else if(keyCode == SHIFT ){
+     if(keyCode == SHIFT ){
 	shiftDown = false;
-        }
+       }
      else if(keyCode == ESCAPE){
 
 	organCanvas.deselect();
+	}
 }
+
+function mouseMoved(){
+	for( var i = 0; i < organButtons.length;i++)
+        {
+               organButtons[i].mouseMoved(mouseX, mouseY);
+        }
+    saveButton.mouseMoved(mouseX,mouseY);
+    clearButton.mouseMoved(mouseX,mouseY);
+    helpButton.mouseMoved(mouseX,mouseY);
+    renderButton.mouseMoved(mouseX,mouseY);	
 }
 

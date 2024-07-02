@@ -1,4 +1,4 @@
-
+var promptWithNL = "";
 
 function createPrompt(organList){
 
@@ -8,10 +8,10 @@ function createPrompt(organList){
 		return "";
 	}else
 	{
-	var prompt = "a unique amphibious creature with ";
+		var prompt = "a unique amphibious creature with ";
 
-	for(var i = 0;i < organList.length;i++)
-	{
+		for(var i = 0;i < organList.length;i++)
+		{
 		console.log(i + ": " + organList[i].x + "," + organList[i].canvasW + "   " + organList[i].y +"," + organList[i].canvasH);
 		var normX = organList[i].x / organList[i].canvasW;
 		var normY = organList[i].y / organList[i].canvasH;
@@ -24,43 +24,42 @@ function createPrompt(organList){
 //		    prompt += " and ";
 //		else  if(i < organList.length-2)
 //		    prompt += ", a ";
-	}
-
-	prompt += creatureLocation() + " featuring an elongated, segmented body, webbed limbs for efficient movement, and keen sensory organs. Highlight the vibrant forest flora and detailed burrow system, emphasizing realistic textures and dynamic lighting. High detail, lifelike depiction, intricate anatomical features, immersive natural habitat ";
-
-	var paragraphWidth = 70;
-
-	const myArray = prompt.split(" ");
-	var indx = 0; 
-	var totalLength = 0;
-
-	var promptWithNL = "";
-
-	while(indx < myArray.length )
-	{
-		
-		promptWithNL += myArray[indx] + " ";
-		totalLength += myArray[indx].length;
-		if(totalLength > paragraphWidth)
-		{
-			totalLength = 0;
-			promptWithNL += "\n";
 		}
-		indx++;
-	}	
 
-	var strArr =[];
-	strArr.push( promptWithNL);
-	saveStrings(strArr, "prompt.txt");
+		prompt += creatureLocation() + " featuring an elongated, segmented body, webbed limbs for efficient movement, and keen sensory organs. Highlight the vibrant forest flora and detailed burrow system, emphasizing realistic textures and dynamic lighting. High detail, lifelike depiction, intricate anatomical features, immersive natural habitat ";
 
-        url = "http://18.189.184.178/?prompt=\"" + promptWithNL + "\"";
-	loadingGenImg = true;
-	console.log("opening url: " + url);
-	outputImg = loadImage(url);
-	return promptWithNL;
+		var paragraphWidth = 70;
+
+		const myArray = prompt.split(" ");
+		var indx = 0; 
+		var totalLength = 0;
+
+		while(indx < myArray.length )
+		{
+		
+			promptWithNL += myArray[indx] + " ";
+			totalLength += myArray[indx].length;
+			if(totalLength > paragraphWidth)
+			{
+				totalLength = 0;
+				promptWithNL += "\n";
+			}
+			indx++;
+		}	
+
+
+       		url = "http://18.189.184.178/?prompt=\"" + promptWithNL + "\"";
+		loadingGenImg = true;
+		console.log("opening url: " + url);
+		outputImg = loadImage(url);
+		return promptWithNL;
 	}
 }
-
+function savePrompt(filename){
+                var strArr =[];
+                strArr.push( promptWithNL);
+                saveStrings(strArr, filename);
+        }
 // organName - string 
 // numOrgans - number of organs
 // posX - 0.0 - 1.0 normalised
@@ -131,3 +130,4 @@ function creatureLocation(){
 	description += creatureLocation[ randLocation ];
 	return description;
 }
+
