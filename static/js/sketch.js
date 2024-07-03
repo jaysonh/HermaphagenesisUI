@@ -232,8 +232,8 @@ class OrganDisplay{
     select(selX,selY)
     {
 	console.log("checking sel " + selX +"," + selY + " against " + this.x + "," + this.y + " - " + (this.x+this.w) + "," + (this.y + this.h) );
-	if( selX > this.x && selX < this.x + this.w &&
-            selY > this.y && selY < this.y + this.h )
+	if( selX > this.x - this.w/2 && selX < this.x + this.w/2 &&
+            selY > this.y - this.h/2 && selY < this.y + this.h/2 )
        {
 		this.selected = true;
 
@@ -248,34 +248,23 @@ class OrganDisplay{
     }
 
     draw(){
-//	fill(this.r, this.g, this.b);
-//	rect(this.x, this.y, this.w, this.h);
 	fill(255);
-//	translate(-this.selectOffX, -this.selectOffY);
 	
 	this.selectOffX = 0; this.selectOffY=0;
     	
 	if(this.selected == true)
 	{
 		tint(0,255,0,127);
-	    //stroke(0);
-	    //strokeWeight(4);
-	    //noFill();
-	    //rect( this.x - this.selectOffX, this.y - this.selectOffY, 
-		//  this.w, 		    this.h);
-//	    line( this.x - this.selectOffX, 	     this.y - this.selectOffY, 
-///		  this.x + this.w - this.selectOffX, this.y + this.h - this.selectOffY);
-///	    line( this.x - this.selectOffX + this.w, this.y - this.selectOffY, 
-//		  this.x - this.selectOffX, 	     this.y + this.h - this.selectOffY);
 	}else {
- //		noStroke();
 		tint(255,255,255,255);
 	}
-
+	imageMode(CENTER);
         image( imgs[ this.iconIndx], this.x - this.selectOffX, this.y - this.selectOffY, this.w, this.h);
+    	imageMode(CORNER);
     }
 
     mouseMoved(moveX,moveY){
+
 	this.x = moveX;
 	this.y = moveY;
    }
