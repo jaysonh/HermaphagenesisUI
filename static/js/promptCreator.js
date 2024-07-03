@@ -48,7 +48,7 @@ function createPrompt(organList){
 		}	
 
 
-       		url = "http://18.189.184.178/?prompt=\"" + promptWithNL + "\"";
+       		url = "http://18.189.184.178/?prompt=\"" + promptWithNL + "\"&key=1234";
 		loadingGenImg = true;
 		console.log("opening url: " + url);
 		outputImg = loadImage(url);
