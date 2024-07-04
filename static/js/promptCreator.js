@@ -8,7 +8,7 @@ function createPrompt(organList){
 		return "";
 	}else
 	{
-		var prompt = "a unique amphibious creature with ";
+		var prompt = "";
 
 		for(var i = 0;i < organList.length;i++)
 		{

@@ -1,6 +1,7 @@
 /// For chrome install this extension: https://mybrowseraddon.com/access-control-allow-origin.html?v=0.1.9&type=install
 let iconSize = 50;
 let imgs = []
+let helpMenuImg=null;
 let prompt_txt = "";
 let shiftDown = false;
 let bg_tex ;
@@ -9,6 +10,7 @@ let blankImg;
 let sizeDragging = false;
 
 function preload() {
+  helpMenuImg = loadImage('/static/images/herma_help_menu.jpg');
   imgs.push( loadImage('/static/images/liver.png'));
   imgs.push( loadImage('/static/images/stomach.png'));
   imgs.push( loadImage('/static/images/intestine.png'));
@@ -358,7 +360,7 @@ let promptButton;
 let numOrganButtons = 4;
 let organCanvas;
 let selectedOrgan = null;
-
+let displayHelpMenu  = false;
 let outputDisplay = null;
 
 function drawOrganSelectMenu(x,y,w,h)
@@ -395,7 +397,7 @@ function setup() {
   clearButton.action_function = function() {organCanvas.clear(); outputDisplay.clear() }
 
   helpButton  = new OrganButton( imgs.length-2, "menu_button_help.jpg", buttonOffset*3 + buttonSize * 2, buttonOffset, buttonSize, buttonSize,70,70,70);
-  helpButton.action_function = function() {}
+  helpButton.action_function = function() { displayHelpMenu = true; }
 
   renderButton  = new OrganButton( imgs.length-1, "menu_button_render.jpg",  buttonOffset*4 + buttonSize * 3, buttonOffset, buttonSize, buttonSize, 70,70,70);
   renderButton.action_function = function() {   prompt_txt = createPrompt( organCanvas.organs );}
@@ -425,20 +427,37 @@ tint(255);
     organCanvas.draw();
     drawPromptBox(5,600, prompt_txt);   
     outputDisplay.draw();
+
+    if( displayHelpMenu === true )
+    {
+	fill(0,127);
+	rect(0,0,width,height);
+
+	 fill(255);
+         texture(helpMenuImg);
+	 var xOff = (width - helpMenuImg.width)/2;
+ 	 var yOff = (height - helpMenuImg.height)/2;
+         rect(xOff,yOff,helpMenuImg.width, helpMenuImg.height );
+
+
+    }
 }
 
 var selOrgan = -1;
 
 function mousePressed()
 {
-	 var selButton = false;
+	if( displayHelpMenu === true ){
+		displayHelpMenu = false;
+	}else{
+	 	var selButton = false;
 
-	// check if pressed organ button
-	if(shiftDown === false)
-	{
-		var selIndx = -1;
-		for( let i = 0; i < organButtons.length; i++)
-	 	{
+		// check if pressed organ button
+		if(shiftDown === false)
+		{
+			var selIndx = -1;
+			for( let i = 0; i < organButtons.length; i++)
+	 		{
 				var isSelected = organButtons[i].mousePressed(mouseX,mouseY);
         			selButton = isSelected || selButton;
     				if(isSelected === true){
@@ -446,37 +465,36 @@ function mousePressed()
 					selOrgan = i;
 					console.log("button" + i + " selected: " + isSelected);
 				}
-		}
-
-		if(selIndx != -1 )
-		{
-			for( var i = 0; i < organButtons.length;i++)
-			{
-				if( i == selIndx ){
-					organButtons[i].setHighlight(true);
-				}else{
-					organButtons[i].setHighlight(false);
-				}
-
 			}
+
+			if(selIndx != -1 )
+			{
+				for( var i = 0; i < organButtons.length;i++)
+				{
+					if( i == selIndx ){
+						organButtons[i].setHighlight(true);
+					}else{
+						organButtons[i].setHighlight(false);
+					}
+				}
+			}
+
+    			selButton = selButton || saveButton.mousePressed(mouseX,mouseY);
+    			selButton = selButton || clearButton.mousePressed(mouseX,mouseY);
+    			selButton = selButton || helpButton.mousePressed(mouseX,mouseY);
+			selButton = selButton || renderButton.mousePressed(mouseX,mouseY);
+
+			console.log("Selected button: " + selButton);
 		}
 
-    		selButton = selButton || saveButton.mousePressed(mouseX,mouseY);
-    		selButton = selButton || clearButton.mousePressed(mouseX,mouseY);
-    		selButton = selButton || helpButton.mousePressed(mouseX,mouseY);
-		selButton = selButton || renderButton.mousePressed(mouseX,mouseY);
+		if( shiftDown === false && selButton === false )
+		{
+			organCanvas.addOrgan(mouseX, mouseY, selOrgan);
+		}
 
-		console.log("Selected button: " + selButton);
-	}
-
-	if( shiftDown === false && selButton === false )
-	{
-		organCanvas.addOrgan(mouseX, mouseY, selOrgan);
-	}
-
-	if( shiftDown === true){
-
-		selOrgan = organCanvas.selectOrgan(mouseX,mouseY);
+		if( shiftDown === true){
+			selOrgan = organCanvas.selectOrgan(mouseX,mouseY);
+		}
 	}
 }
 
