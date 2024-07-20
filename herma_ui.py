@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS, cross_origin
+from dotenv import load_dotenv
 import os
 
 app = Flask(__name__,  static_url_path='/static')
@@ -36,5 +37,6 @@ def hello():
         return "invalid api key"
 
 if __name__ == "__main__":
+    load_dotenv()
     app.run()
 

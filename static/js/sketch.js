@@ -75,25 +75,13 @@ class OrganCanvas{
 	pop();
     }
     
-    adjustOrganSize(diff, organIndx){
-
-	console.log("adjust organ size: " + this.selectedOrgan);
-	if(organIndx != -1)
-	{
-		this.organs[ organIndx ].adjustOrganSize(diff);
-	}
-    }
-
-	
-   
    mouseDragged(){
     }
 
     addOrgan(mX,mY, iconIndx){
-	
 	iconSize = 150;
-	if(mX > this.x && mX < this.x + this.w-iconSize &&
-	   mY > this.y && mY < this.y + this.h-iconSize)
+	if(mX > this.x+iconSize/2 && mX < this.x + this.w-iconSize/2 &&
+	   mY > this.y+iconSize/2  && mY < this.y + this.h-iconSize/2)
 	{
 	    this.organs.push( new OrganDisplay(mX- this.x, mY- this.y, iconSize, iconSize, 255,255,255, iconIndx, "kidney", this.w, this.h ) );
    	}else
