@@ -11,10 +11,10 @@ let sizeDragging = false;
 
 function preload() {
   helpMenuImg = loadImage('/static/images/herma_help_menu.jpg');
-  imgs.push( loadImage('/static/images/liver.png'));
-  imgs.push( loadImage('/static/images/stomach.png'));
-  imgs.push( loadImage('/static/images/intestine.png'));
-  imgs.push( loadImage('/static/images/kidney.png'));
+  imgs.push( loadImage('/static/images/liver_pixelated.png'));
+  imgs.push( loadImage('/static/images/stomach_pixelated.png'));
+  imgs.push( loadImage('/static/images/intestine_pixelated.png'));
+  imgs.push( loadImage('/static/images/kidney_pixelated.png'));
 
 
   imgs.push( loadImage('/static/images/menu_button_save.jpg'));
@@ -302,6 +302,10 @@ class OrganButton{
 	fill(155);
 	rect(this.x,this.y,this.w,this.h);
         image(imgs[this.iconIndx],this.x, this.y, this.w, this.h);
+	noFill();
+	stroke(0);
+	strokeWeight(4);
+	rect(this.x, this.y, this.w, this.h);
     }
 
     mouseMoved(mouseX,mouseY){
