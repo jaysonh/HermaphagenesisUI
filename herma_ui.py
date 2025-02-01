@@ -12,16 +12,13 @@ cors = CORS(app, resource={
     }
 })
 
-api_access = { "jayson" : "1234",
-               "marcin"  : "abcd1234",
+api_access = { 
                "test"  : "sj324hjn3j24jj23" }
 
 def checkApiAccess(api_key):
     element_found = False
     for value in api_access.values():
-        print(f"checking value {value} against {api_key}")
         if value == api_key:
-            print(f"found api_key {api_key}") 
             element_found = True
             break
     return element_found;
@@ -38,5 +35,5 @@ def hello():
 
 if __name__ == "__main__":
     load_dotenv()
-    app.run()
+    app.run(debug=False, use_reloader=False)
 

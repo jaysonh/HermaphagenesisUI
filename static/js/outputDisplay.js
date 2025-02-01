@@ -6,7 +6,7 @@ class OutputDisplay
 	     this.w = w;
 	     this.h = h;	    
 	     this.angle = 0;
-	     this.loadingText = loadImage("/static/images/loading_text.png");
+	     this.loadingText = loadImage("/static/images/loading_text_white.png");
 	     this.blankTex =loadImage("/static/images/blank.png");  
 	}
 
@@ -73,7 +73,8 @@ class OutputDisplay
 	    rect(this.x, this.y, this.w, this.h );
 
 
-	    fill(200);
+	    tint(100);
+	   strokeWeight(4);
     	    texture(canvas_tex);
     	    rect( this.x, this.y, this.w, this.h );
 	

@@ -1,5 +1,4 @@
-var promptWithNL = "";
-
+var genAIServer = "18.222.113.140"; //3.147.45.53
 function createPrompt(organList){
 
 	if( organList.length <= 0)
@@ -12,31 +11,23 @@ function createPrompt(organList){
 
 		for(var i = 0;i < organList.length;i++)
 		{
-		console.log(i + ": " + organList[i].x + "," + organList[i].canvasW + "   " + organList[i].y +"," + organList[i].canvasH);
-		var normX = organList[i].x / organList[i].canvasW;
-		var normY = organList[i].y / organList[i].canvasH;
-		var posTxt = createOrganPosition(organList[i].name,1,normX, normY);
+			console.log(i + ": " + organList[i].x + "," + organList[i].canvasW + "   " + organList[i].y +"," + organList[i].canvasH);
+			var normX = organList[i].x / organList[i].canvasW;
+			var normY = organList[i].y / organList[i].canvasH;
+			var posTxt = createOrganPosition(organList[i].name,1,normX, normY);
 
-		prompt += posTxt;
-//		prompt += organList[i].name;
-//
-//		if( i==organList.length-2 )
-//		    prompt += " and ";
-//		else  if(i < organList.length-2)
-//		    prompt += ", a ";
+			prompt += posTxt;
 		}
-
-		prompt += creatureLocation() + " featuring an elongated, segmented body, webbed limbs for efficient movement, and keen sensory organs. Highlight the vibrant forest flora and detailed burrow system, emphasizing realistic textures and dynamic lighting. High detail, lifelike depiction, intricate anatomical features, immersive natural habitat ";
+//		prompt += creatureLocation() + " featuring an elongated, segmented body, webbed limbs for efficient movement, and keen sensory organs. Highlight the vibrant forest flora and detailed burrow system, emphasizing realistic textures and dynamic lighting. High detail, lifelike depiction, intricate anatomical features, immersive natural habitat ";
 
 		var paragraphWidth = 70;
 
 		const myArray = prompt.split(" ");
 		var indx = 0; 
 		var totalLength = 0;
-
+		var promptWithNL = "";
 		while(indx < myArray.length )
 		{
-		
 			promptWithNL += myArray[indx] + " ";
 			totalLength += myArray[indx].length;
 			if(totalLength > paragraphWidth)
@@ -47,9 +38,8 @@ function createPrompt(organList){
 			indx++;
 		}	
 
-
-       		url = "http://18.189.184.178/?prompt=\"" + promptWithNL + "\"&key=1234";
-		loadingGenImg = true;
+		url = "http://3.133.198.133/?prompt=\"" + promptWithNL + "\"&key=sj324hjn3j24jj23";
+                loadingGenImg = true;
 		console.log("opening url: " + url);
 		outputImg = loadImage(url);
 		return promptWithNL;
@@ -118,14 +108,18 @@ function getRandomInt(min, max) {
 
 function creatureLocation(){
 
-	var description = "Visusalise this organism in ";
+	var description = "Visualise this organism in ";
 
 	var creatureLocation = [];
-	creatureLocation.push(" in a dense forest with underground burrows,"     );
-	creatureLocation.push(" in a dense forest and mountainous region");
+	creatureLocation.push(" a dense forest with underground burrows,"     );
+	creatureLocation.push(" a mountainous region");
 	creatureLocation.push(" a vibrant forest flora and rugged mountain terrain");
+	creatureLocation.push(" a dry desert");
+	creatureLocation.push(" a marshy swampland");
 
-	var randLocation = getRandomInt(0,2);
+
+
+	var randLocation = getRandomInt(0,creatureLocation.length-1);
 
 	description += creatureLocation[ randLocation ];
 	return description;

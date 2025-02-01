@@ -59,8 +59,9 @@ class OrganCanvas{
        fill(this.r,this.g,this.b);
        rect(this.x, this.y, this.w, this.h);
     
-    fill(200);
+    tint(100);
     texture(canvas_tex);
+    strokeWeight(4);
     rect(this.x, this.y, this.w, this.h );
 
 
@@ -80,8 +81,9 @@ class OrganCanvas{
 
     addOrgan(mX,mY, iconIndx){
 	iconSize = 150;
-	if(mX > this.x+iconSize/2 && mX < this.x + this.w-iconSize/2 &&
-	   mY > this.y+iconSize/2  && mY < this.y + this.h-iconSize/2)
+	if( mX > this.x+iconSize/2 && mX < this.x + this.w-iconSize/2 &&
+	    mY > this.y+iconSize/2  && mY < this.y + this.h-iconSize/2 &&
+	    iconIndx > -1 )
 	{
 	    this.organs.push( new OrganDisplay(mX- this.x, mY- this.y, iconSize, iconSize, 255,255,255, iconIndx, "kidney", this.w, this.h ) );
    	}else
@@ -90,7 +92,7 @@ class OrganCanvas{
 	}
    }
 
-   clear(){
+    clear(){
     this.organs = []
   }
 
@@ -104,6 +106,7 @@ class OrganCanvas{
     }
 
     selectOrgan(mX,mY){
+	
 	var result = -1;
 	mX = mX - this.x;
 	mY = mY - this.y;
@@ -113,8 +116,7 @@ class OrganCanvas{
 		     result = i;
 		}
 	 }
-
-	return result;
+	 return result;
     }
 
     moveOrgan(mX,mY,pX,pY, organIndx){
@@ -130,7 +132,8 @@ class OrganCanvas{
 	if(organIndx > -1 ){
 		this.organs[organIndx].moveTo(mX,mY);
    	} 
-   }
+    }
+
     mousePressed(mX,mY){
 	if(shiftDown===true)
 	{
@@ -140,23 +143,19 @@ class OrganCanvas{
 			if( this.organs[i].select( mX-this.x,mY-this.y) === true )
 			{
 				this.selectedOrgan = i;
-				console.log("select organ: " + this.selectedOrgan);	
-				//console.log("organ: " + i + " IS SELECTED!!!");
 			}
 	
 		}	
 	}else if(shiftDown === true){
 
 	}else{
-		var organSizeX = 150;
-		var organSizeY = 150;
-		console.log("mousePressed: " + mX + "," + mY + " canvas pos: " + this.x + "," + this.y	+ " selected organ: " + selectedOrgan);
+	       var organSizeX = 150;
+	       var organSizeY = 150;
 	       if( mX > this.x && mX < this.x  + this.w - organSizeX && this.x > 0 &&
         	   mY > this.y && mY < this.y  + this.h - organSizeY && this.y < mY && selectedOrgan != null )
        	       {
     	       		let offX = mX - this.x;
 	   		let offY = mY - this.y;
-	   		//console.log("adding organ at: " + offX + "," + offY);	
 	   		this.organs.push( new OrganDisplay( offX, offY, organSizeX,organSizeY,selectedOrgan.r, selectedOrgan.g, selectedOrgan.b, selectedOrgan.iconIndx, selectedOrgan.name, this.w, this.h));
        		}
 	}
@@ -184,7 +183,6 @@ class OrganDisplay{
 	this.minHeight = 10;
 	this.minWidth  = 10;
 
-	console.log("creating OrganDisplay at positin: " + this.x + "," + this.y + " size: " + this.w + "," + this.h + " canvas size: " + this.canvasW + "," + this.canvasH);
     }
     deselect(){
 	this.selected = false;
@@ -203,11 +201,11 @@ class OrganDisplay{
 	var xAdd = aspectRatio * diff;
 	var yAdd = 1.0 * diff;
 
-	console.log("xAdd: " + xAdd + " yAdd: " + yAdd);
 	var newWidth = this.w + xAdd;
 	var newHeight = this.h + yAdd;
 	var minWidth = 10;
 	var minHeight = 10;
+
 	if( newWidth > minWidth && newHeight > minHeight)
 	{
 		this.w = newWidth;
@@ -221,7 +219,6 @@ class OrganDisplay{
 
     select(selX,selY)
     {
-	console.log("checking sel " + selX +"," + selY + " against " + this.x + "," + this.y + " - " + (this.x+this.w) + "," + (this.y + this.h) );
 	if( selX > this.x - this.w/2 && selX < this.x + this.w/2 &&
             selY > this.y - this.h/2 && selY < this.y + this.h/2 )
        {
@@ -353,11 +350,6 @@ let outputDisplay = null;
 
 function drawOrganSelectMenu(x,y,w,h)
 {
-   
-  //          fill(200);
-  //          texture(canvas_tex);
-//	    rect(x,y,w,h);
-
     for( let i = 0; i < organButtons.length; i++)
     {
          organButtons[i].draw();
@@ -369,14 +361,12 @@ function drawOrganSelectMenu(x,y,w,h)
     renderButton.draw();
 }
 
-
 function setup() {
   createCanvas(1024, 768, WEBGL);
 
   outputDisplay = new OutputDisplay(516, 70, 500,500,blankImg);
   buttonSize = 50;
   buttonOffset = 5;
-
 
   saveButton  = new OrganButton( imgs.length-4, "menu_button_save.jpg", buttonOffset* 1 + buttonSize * 0, buttonOffset, buttonSize, buttonSize, 70,70,70);
   saveButton.action_function = function() {outputDisplay.save(); savePrompt("prompt.txt"); }
@@ -405,11 +395,10 @@ function setup() {
 function draw() {
     background(200);
     translate(-width/2,-height/2);
-tint(255);    
+    tint(255);    
     fill(200);
-   texture(bg_tex);
+    texture(bg_tex);
     rect(0,0,width,height);
-
 
     drawOrganSelectMenu(0,0,width,height);
     organCanvas.draw();
@@ -451,7 +440,6 @@ function mousePressed()
     				if(isSelected === true){
 			    		selIndx = i;
 					selOrgan = i;
-					console.log("button" + i + " selected: " + isSelected);
 				}
 			}
 
@@ -471,8 +459,6 @@ function mousePressed()
     			selButton = selButton || clearButton.mousePressed(mouseX,mouseY);
     			selButton = selButton || helpButton.mousePressed(mouseX,mouseY);
 			selButton = selButton || renderButton.mousePressed(mouseX,mouseY);
-
-			console.log("Selected button: " + selButton);
 		}
 
 		if( shiftDown === false && selButton === false )
@@ -493,7 +479,6 @@ function mouseReleasaed(){
 function mouseDragged()
 {
 	if(shiftDown === true){
-        	console.log("moving organ: " + selOrgan);
 	        organCanvas.moveOrgan(mouseX,mouseY,pmouseX,pmouseY, selOrgan);
         }
 
@@ -502,11 +487,8 @@ function mouseDragged()
 function keyPressed() {
         if(keyCode == SHIFT ){
 	    shiftDown = true;
-            console.log("shift presed");
 	}
-
 }
-
 
 function keyReleased() {
      if(keyCode == SHIFT ){
