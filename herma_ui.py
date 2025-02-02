@@ -13,7 +13,8 @@ cors = CORS(app, resource={
 })
 
 api_access = { 
-               "test"  : "sj324hjn3j24jj23" }
+               "test"  : "sj324hjn3j24jj23",
+	         "marcin" : "abcd1234" }
 
 def checkApiAccess(api_key):
     element_found = False
@@ -25,7 +26,7 @@ def checkApiAccess(api_key):
 
 @app.route("/")
 def hello():
-
+    print("os.environ: ", os.environ)
     apiKey = request.args.get('key')
 
     if checkApiAccess( apiKey ) == True:
@@ -35,5 +36,5 @@ def hello():
 
 if __name__ == "__main__":
     load_dotenv()
-    app.run(debug=False, use_reloader=False)
+    app.run( debug=False, use_reloader=False)
 

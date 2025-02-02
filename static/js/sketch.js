@@ -9,12 +9,14 @@ let canvas_tex;
 let blankImg;
 let sizeDragging = false;
 
+const organNames = [ "liver", "stomach", "intestine", "lungs" ];
+
 function preload() {
   helpMenuImg = loadImage('/static/images/herma_help_menu.jpg');
   imgs.push( loadImage('/static/images/liver_pixelated.png'));
   imgs.push( loadImage('/static/images/stomach_pixelated.png'));
   imgs.push( loadImage('/static/images/intestine_pixelated.png'));
-  imgs.push( loadImage('/static/images/kidney_pixelated.png'));
+  imgs.push( loadImage('/static/images/lungs_pixelated.png'));
 
 
   imgs.push( loadImage('/static/images/menu_button_save.jpg'));
@@ -47,7 +49,7 @@ class OrganCanvas{
     }
 
     getOrgans(){
-	// 1=liver 2=heart 3 =intestine 4=kidney
+	// 1=liver 2=heart 3 =intestine 4=lungs
 	return this.organs;
     }
     unselect(){
@@ -85,7 +87,7 @@ class OrganCanvas{
 	    mY > this.y+iconSize/2  && mY < this.y + this.h-iconSize/2 &&
 	    iconIndx > -1 )
 	{
-	    this.organs.push( new OrganDisplay(mX- this.x, mY- this.y, iconSize, iconSize, 255,255,255, iconIndx, "kidney", this.w, this.h ) );
+	    this.organs.push( new OrganDisplay(mX- this.x, mY- this.y, iconSize, iconSize, 255,255,255, iconIndx, organNames[ iconIndx ], this.w, this.h ) );
    	}else
 	{
 		console.log("cannot add organ out of bounds");
@@ -332,6 +334,7 @@ class OrganButton{
 
 	    if( this.action_function != null)
 	    {
+		console.log("mousePressed");
 		this.action_function();
 	    }
        }else{
@@ -386,8 +389,8 @@ function setup() {
 
   organButtons.push( new OrganButton( 0, "liver", 	 400 + 1 * buttonOffset + 0 * buttonSize, buttonOffset,buttonSize, buttonSize, 200,0, 125) );
   organButtons.push( new OrganButton( 1, "intestine",    400 + 2 * buttonOffset + 1 * buttonSize, buttonOffset,buttonSize, buttonSize,125,125,50) );
-  organButtons.push( new OrganButton( 2, "kidney",	 400 + 3 * buttonOffset + 2 * buttonSize, buttonOffset,buttonSize, buttonSize,125,0,215) );
-  organButtons.push( new OrganButton( 3, "heart", 	 400 + 4 * buttonOffset + 3 * buttonSize, buttonOffset,buttonSize, buttonSize,0,125,50) );
+  organButtons.push( new OrganButton( 2, "lungs",	 400 + 3 * buttonOffset + 2 * buttonSize, buttonOffset,buttonSize, buttonSize,125,0,215) );
+  organButtons.push( new OrganButton( 3, "stomach", 	 400 + 4 * buttonOffset + 3 * buttonSize, buttonOffset,buttonSize, buttonSize,0,125,50) );
 
   for(var i = 0;i < organButtons.length;i++)
   {

@@ -18,7 +18,6 @@ function createPrompt(organList){
 
 			prompt += posTxt;
 		}
-//		prompt += creatureLocation() + " featuring an elongated, segmented body, webbed limbs for efficient movement, and keen sensory organs. Highlight the vibrant forest flora and detailed burrow system, emphasizing realistic textures and dynamic lighting. High detail, lifelike depiction, intricate anatomical features, immersive natural habitat ";
 
 		var paragraphWidth = 70;
 
@@ -41,9 +40,19 @@ function createPrompt(organList){
 		url = "http://3.133.198.133/?prompt=\"" + promptWithNL + "\"&key=sj324hjn3j24jj23";
                 loadingGenImg = true;
 		console.log("opening url: " + url);
-		outputImg = loadImage(url);
+		outputImg = loadImage(url, handleImage, handleError);
 		return promptWithNL;
 	}
+}
+
+// Display the image.
+function handleImage(img) {
+	console.log("finisehd loading img")
+}
+
+// Log the error.
+function handleError(event) {
+  console.error('Oops!', event);
 }
 function savePrompt(filename){
                 var strArr =[];
